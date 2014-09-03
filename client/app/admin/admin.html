@@ -1,0 +1,28 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<header class="hero-unit" id="banner">
+</header>
+
+<div class="container">
+  <h3>Users <button type="submit" class="btn btn-primary btn-xs" ng-click="addUser()"><span class="glyphicon glyphicon-plus"></span> User</button></h3>
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="user in users">
+        <strong>{{user.name}}</strong><br>
+        <span class="text-muted">{{user.email}}</span>
+        <a ng-click="deleteUser(user)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+    </li>
+  </ul>
+</div>
+
+<div class="container">
+  <h3>Courses <button type="submit" class="btn btn-primary btn-xs" ng-click="addCourse()"><span class="glyphicon glyphicon-plus"></span> Course</button></h3>
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="course in courses">
+        <strong><a href="" ui-sref="admin.courses({ courseId: course._id })">{{course.name}}</a></strong>
+        <span ng-repeat="tag in course.tags" class="label label-default margin-sm-horizontal">{{tag}}</span>
+        <a ng-click="delete(user)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+    </li>
+  </ul>
+  
+  <div ui-view class="span9 slide"></div>
+</div>

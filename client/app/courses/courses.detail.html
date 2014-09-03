@@ -1,0 +1,12 @@
+<h4>Course Details</h4>
+<span ng-if="!error">
+	<ul ng-repeat="section in course">
+		<li ng-repeat="enrollment in section.enrollments">{{ enrollment.user.name }} (role: {{ enrollment.role }})</li>
+	</ul>
+</span>
+<span ng-if="err">
+	<div class="panel panel-danger">
+		<div class="panel-heading"><h3 class="panel-title">Error</h3></div>
+		<div class="panel-body">{{ message }}</div>
+	</div>
+</span>
