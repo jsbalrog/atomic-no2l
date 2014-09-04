@@ -8,7 +8,7 @@ angular.module('meltApp')
         templateUrl: 'app/admin/admin.html',
         controller: 'AdminCtrl'
       })
-			.state('admin.courses', {
+			.state('course-detail', {
 				url: '/courses/:courseId',
 				templateUrl: 'app/courses/courses.detail.html',
 				controller: 'CoursesCtrl'

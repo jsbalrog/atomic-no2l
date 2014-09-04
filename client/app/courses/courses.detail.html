@@ -1,12 +1,38 @@
-<h4>Course Details</h4>
-<span ng-if="!error">
-	<ul ng-repeat="section in course">
-		<li ng-repeat="enrollment in section.enrollments">{{ enrollment.user.name }} (role: {{ enrollment.role }})</li>
-	</ul>
-</span>
-<span ng-if="err">
-	<div class="panel panel-danger">
-		<div class="panel-heading"><h3 class="panel-title">Error</h3></div>
-		<div class="panel-body">{{ message }}</div>
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="container">
+<p class="small margin-md-bottom"><a href="" ng-click="cancelCourseEdit()"><span class="glyphicon glyphicon-arrow-left"></span> Go back</a></p>
+<form role="form">
+	<div class="form-group">
+		<label for="courseName">Course Name</label>
+		<input type="text" class="form-control" id="courseName" placeholder="Enter course name" value="{{ course.courseName }}">
 	</div>
-</span>
+	<div class="form-group">
+		<label for="courseOrg">Organization</label><br/>
+		<div class="btn-group" dropdown is-open="status.isopen">
+		<button type="button" class="btn btn-primary dropdown-toggle">{{ course.orgId }} <span class="caret"></span></button>
+		<ul class="dropdown-menu" role="menu">
+			<li ng-repeat="o in options"><a dropdown-toggle ng-click="saveOrg(o)">{{o}}</a></li>
+		</ul>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="courseTags">Tags</label>
+	 	<tags-input id="courseTags" class="bootstrap" ng-model="course.tags"></tags-input>
+	</div>
+	<div class="form-group">
+		<label for="courseEnrollments">Enrollments <button type="submit" class="btn btn-primary btn-xs" ng-click="addEnrollment(course)"><span class="glyphicon glyphicon-plus"></span></button></label>
+		<span ng-if="!err">
+		<ul ng-repeat="section in course.sections" class="list-group">
+			<li class="list-group-item" ng-repeat="enrollment in section.enrollments">
+					<strong>{{ enrollment.user.name }}</strong> ({{ enrollment.role }})
+					<a ng-click="deleteEnrollment(enrollment)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+			</li>
+		</ul>
+		</span>
+		<span ng-if="err">
+			<div class="alert alert-info">{{ message }}</div>
+		</span>
+	</div>
+	<button type="submit" class="btn btn-default">Submit</button>&nbsp;&nbsp;&nbsp;<a ref="" ng-click="cancelCourseEdit()">Cancel</a>
+</form>
+</div>

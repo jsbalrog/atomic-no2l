@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var enrollmentSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.ObjectId, ref: 'User', index: true },
   active: { type: Boolean, default: true },
-  role: { type: Number }
+  role: { type: String }
 });
 
 var sectionSchema = new mongoose.Schema({

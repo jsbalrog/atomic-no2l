@@ -35,11 +35,7 @@ function coursesReadAllByOrgId(orgId) {
 function getAllSectionsByCourseId(courseId) {
 	return new Promise(function(fulfill, reject) {
 		Section.find({course: courseId}).populate('enrollments.user').exec(function(err, sections) {
-			if(sections.length < 1) {
-				reject({
-					"message": "course id not found for: " + courseId
-				});
-			} else if(err) {
+			if(err) {
 				reject({
 					"message": err
 				});
@@ -113,8 +109,26 @@ module.exports.coursesGetDetails = function(req, res) {
 		common.sendJSONResponse(res, 400, msg);
 	} else {
 		getAllSectionsByCourseId(req.params.courseId).then(function(sections) {
-			console.log(sections);
-			common.sendJSONResponse(res, 200, sections);
+			Course.findById(req.params.courseId).exec(function(err, course) {
+				if(!course) {
+					var msg = {
+						"message": "course id not found"
+					};
+					common.sendJSONResponse(res, 400, msg);
+				} else if(err) {
+					common.sendJSONResponse(res, 400, err);
+				} else {
+					console.log(sections);
+					var retVal = {
+						"courseId": req.params.courseId,
+						"courseName": course.name,
+						"orgId": course.orgId,
+						"tags": course.tags,
+						"sections": sections
+					}
+					common.sendJSONResponse(res, 200, retVal);
+				}
+			});
 		}, function(jsonErrorResponse) {
 			common.sendJSONResponse(res, 400, jsonErrorResponse);
 		});

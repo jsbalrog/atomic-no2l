@@ -9,8 +9,12 @@ angular.module('meltApp')
 			var deferred = $q.defer();
 			$http.get('/api/courses/' + courseId)
 				.success(function(data) {
-					console.log(data);
-					deferred.resolve(data);
+					if(data.sections.length > 0) {
+						deferred.resolve(data);
+					} else {
+						data.message = "No enrollments found"
+						deferred.reject(data);
+					}
 				})
 				.error(function(data) {
 					deferred.reject(data);
