@@ -1,6 +1,10 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="container">
-<p class="small margin-md-bottom"><a href="" ng-click="cancelCourseEdit()"><span class="glyphicon glyphicon-arrow-left"></span> Go back</a></p>
+<p class="small margin-md-bottom">
+	<a href="" ng-click="cancelCourseEdit()">
+		<span class="glyphicon glyphicon-arrow-left"></span> Go back
+	</a>
+</p>
 <div role="form">
 	<div class="form-group">
 		<span class="h3" editable-text="course.courseName">{{ course.courseName }}</span>
@@ -8,7 +12,9 @@
 	<div class="form-group">
 		<label for="courseOrg">Organization</label><br/>
 		<div class="btn-group" dropdown is-open="status.isopen">
-		<button type="button" class="btn btn-primary dropdown-toggle">{{ course.orgId }} <span class="caret"></span></button>
+		<button type="button" class="btn btn-primary dropdown-toggle">
+			{{ course.orgId }} <span class="caret"></span>
+		</button>
 		<ul class="dropdown-menu" role="menu">
 			<li ng-repeat="o in options"><a dropdown-toggle ng-click="saveOrg(o)">{{o}}</a></li>
 		</ul>
@@ -19,12 +25,18 @@
 	 	<tags-input id="courseTags" class="bootstrap" ng-model="course.tags"></tags-input>
 	</div>
 	<div class="form-group">
-		<label for="courseEnrollments">Enrollments <button type="submit" class="btn btn-primary btn-xs" ng-click="addEnrollment(course)"><span class="glyphicon glyphicon-plus"></span></button></label>
+		<label for="courseEnrollments">Enrollments
+			<button type="submit" class="btn btn-primary btn-xs" ng-click="addEnrollment(course)">
+				<span class="glyphicon glyphicon-plus"></span>
+			</button>
+		</label>
 		<span ng-if="!err">
 		<ul ng-repeat="section in course.sections" class="list-group">
 			<li class="list-group-item" ng-repeat="enrollment in section.enrollments">
 					<strong>{{ enrollment.user.name }}</strong> ({{ enrollment.role }})
-					<a ng-click="deleteEnrollment(enrollment)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+					<a ng-click="deleteEnrollment(enrollment)" class="trash">
+						<span class="glyphicon glyphicon-trash pull-right"></span>
+					</a>
 			</li>
 		</ul>
 		</span>
@@ -32,7 +44,8 @@
 			<div class="alert alert-info">{{ message }}</div>
 		</span>
 	</div>
-	<button type="submit" class="btn btn-default">Submit</button><a ref="" class="btn-cancel" ng-click="cancelCourseEdit()">Cancel</a>
+	<button type="submit" class="btn btn-default">Submit</button>
+	<a ref="" class="btn-cancel" ng-click="cancelCourseEdit()">Cancel</a>
 </div>
 <div ng-show="selected">Selection from a modal: {{ selected.name }}</div>
 </div>
