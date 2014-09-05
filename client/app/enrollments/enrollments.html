@@ -1,15 +1,21 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<header class="hero-unit" id="banner">
-</header>
-
 <div class="container">
 
   <div class="row">
     <div class="col-lg-12">
-      <h3 class="page-header">Your Current Enrollments <button type="submit" class="btn btn-primary btn-xs" ng-click="addThing()"><span class="glyphicon glyphicon-plus"> Enrollment</button></h3>
+      <h3 class="page-header">
+      	Your Current Enrollments
+      	<button type="submit" class="btn btn-primary btn-xs" ng-click="addThing()">
+      		<span class="glyphicon glyphicon-plus"></span>
+      	</button>
+      </h3>
       <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in awesomeThings">
-        <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}<button type="button" class="close" ng-click="deleteThing(thing)">&times;</button></a></li>
+        <li>
+        	<a href="#" tooltip="{{thing.info}}">{{thing.name}}
+        		<button type="button" class="close" ng-click="deleteThing(thing)">&times;</button>
+        	</a>
+        </li>
       </ul>
     </div>
   </div>

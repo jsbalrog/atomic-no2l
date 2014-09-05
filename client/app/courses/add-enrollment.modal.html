@@ -1,0 +1,20 @@
+<div class="modal-header">
+		<h4 class="modal-title">Add Enrollment</h4>
+</div>
+<div class="modal-body">
+	Select user
+	<div class="btn-group margin-md-horizontal" dropdown is-open="status.isopen">
+		<button type="button" class="btn btn-primary dropdown-toggle">{{ selected.user ? selected.user.name : 'Select user' }} <span class="caret"></span></button>
+		<ul class="dropdown-menu" role="menu">
+			<li ng-repeat="user in users"><a dropdown-toggle ng-click="selected.user = user">{{ user.name }}</a></li>
+		</ul>
+	</div>
+
+	<div class="margin-md-vertical" ng-show="selected.user">
+		Select course section
+	</div>
+</div>
+<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="ok()">OK</button>
+		<a href="" class="btn-cancel" ng-click="cancel()">Cancel</a>
+</div>

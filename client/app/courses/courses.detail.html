@@ -33,6 +33,7 @@
 			<div class="alert alert-info">{{ message }}</div>
 		</span>
 	</div>
-	<button type="submit" class="btn btn-default">Submit</button>&nbsp;&nbsp;&nbsp;<a ref="" ng-click="cancelCourseEdit()">Cancel</a>
+	<button type="submit" class="btn btn-default">Submit</button><a ref="" class="btn-cancel" ng-click="cancelCourseEdit()">Cancel</a>
 </form>
+<div ng-show="selected">Selection from a modal: {{ selected.name }}</div>
 </div>

@@ -1,14 +1,15 @@
 'use strict';
 
-angular.module('meltApp').controller('CoursesCtrl', function($scope, $stateParams, $state, CourseService) {
+angular.module('meltApp').controller('CoursesCtrl', function($scope, $stateParams, $state, $modal, CourseService, User) {
 
 	$scope.options = [
-		1,
+		'Priesthood',
 		1111,
-		2222,
-		3333
+		'CES'
 	];
 	
+	$scope.users = User.query();
+
 	CourseService.getCourseDetails($stateParams.courseId).then(function(course) {
 		console.log(course);
 		$scope.course = course;
@@ -26,5 +27,35 @@ angular.module('meltApp').controller('CoursesCtrl', function($scope, $stateParam
 	$scope.cancelCourseEdit = function() {
 		console.log("cancel");
 		$state.go("admin");
+	};
+
+	$scope.addEnrollment = function(course) {
+		var modalInstance = $modal.open({
+      templateUrl: 'app/courses/add-enrollment.modal.html',
+      controller: function ($scope, $modalInstance, users) {
+				$scope.users = users;
+				$scope.selected = {}; // Initially nothing selected by default
+
+				$scope.ok = function () {
+					$modalInstance.close($scope.selected.user);
+				};
+
+				$scope.cancel = function () {
+					$modalInstance.dismiss('cancel');
+				};
+			},
+      size: 'lg',
+      resolve: {
+        users: function () {
+          return $scope.users;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      console.log('Modal dismissed at: ' + new Date());
+    });
 	};
 });
