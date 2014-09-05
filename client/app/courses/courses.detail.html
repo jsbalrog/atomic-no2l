@@ -1,10 +1,9 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="container">
 <p class="small margin-md-bottom"><a href="" ng-click="cancelCourseEdit()"><span class="glyphicon glyphicon-arrow-left"></span> Go back</a></p>
-<form role="form">
+<div role="form">
 	<div class="form-group">
-		<label for="courseName">Course Name</label>
-		<input type="text" class="form-control" id="courseName" placeholder="Enter course name" value="{{ course.courseName }}">
+		<span class="h3" editable-text="course.courseName">{{ course.courseName }}</span>
 	</div>
 	<div class="form-group">
 		<label for="courseOrg">Organization</label><br/>
@@ -34,6 +33,6 @@
 		</span>
 	</div>
 	<button type="submit" class="btn btn-default">Submit</button><a ref="" class="btn-cancel" ng-click="cancelCourseEdit()">Cancel</a>
-</form>
+</div>
 <div ng-show="selected">Selection from a modal: {{ selected.name }}</div>
 </div>
