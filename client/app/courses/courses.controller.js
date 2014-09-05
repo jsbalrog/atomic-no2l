@@ -1,24 +1,27 @@
 'use strict';
 
-angular.module('meltApp').controller('CoursesCtrl', function($scope, $stateParams, $state, $modal, CourseService, User) {
+angular.module('meltApp').controller('CoursesCtrl', function($scope, $stateParams, $state, $modal, CourseService, UserService) {
 
 	$scope.options = [
 		'Priesthood',
 		1111,
 		'CES'
 	];
-	
-	$scope.users = User.query();
 
-	CourseService.getCourseDetails($stateParams.courseId).then(function(course) {
-		console.log(course);
-		$scope.course = course;
-		$scope.err = false;
-	}, function(course) {
-		$scope.course = course;
-		$scope.err = true;
-		$scope.message = course.message;
-	});
+
+	UserService.getAllUsers().then(function(users) {
+		$scope.users = users;
+		CourseService.getCourseDetails($stateParams.courseId).then(function(course) {
+			console.log(course);
+			$scope.course = course;
+			$scope.availableUsers = UserService.getUsersNotInCourse(course);
+			$scope.err = false;
+		}, function(course) {
+			$scope.course = course;
+			$scope.err = true;
+			$scope.message = course.message;
+		});
+	})
 
 	$scope.saveOrg = function(org) {
 		$scope.course.orgId = org;
@@ -32,8 +35,8 @@ angular.module('meltApp').controller('CoursesCtrl', function($scope, $stateParam
 	$scope.addEnrollment = function() {
 		var modalInstance = $modal.open({
       templateUrl: 'app/courses/add-enrollment.modal.html',
-      controller: function ($scope, $modalInstance, users, course) {
-				$scope.users = users;
+      controller: function ($scope, $modalInstance, availableUsers, course) {
+				$scope.users = availableUsers;
 				$scope.course = course;
 				$scope.availableSections = _.filter(course.sections, function(section) {
 					return moment(section.begin) > moment();
@@ -50,8 +53,8 @@ angular.module('meltApp').controller('CoursesCtrl', function($scope, $stateParam
 			},
       size: 'lg',
       resolve: {
-        users: function () {
-          return $scope.users;
+        availableUsers: function () {
+          return $scope.availableUsers;
         },
 				course: function() {
 					return $scope.course;

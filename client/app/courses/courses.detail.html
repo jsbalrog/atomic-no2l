@@ -33,7 +33,7 @@
 		<span ng-if="!err">
 		<ul ng-repeat="section in course.sections" class="list-group">
 			<li class="list-group-item" ng-repeat="enrollment in section.enrollments">
-					<strong>{{ enrollment.user.name }}</strong> ({{ enrollment.role }})
+					<strong>{{ enrollment.user.name }}</strong> ({{ enrollment.role }}) - {{ section.begin | readableDate:'MMMM Do YYYY' }}
 					<a ng-click="deleteEnrollment(enrollment)" class="trash">
 						<span class="glyphicon glyphicon-trash pull-right"></span>
 					</a>
@@ -49,3 +49,9 @@
 </div>
 <div ng-show="selected">Selection from a modal: {{ selected.name }}</div>
 </div>
+
+<footer class="footer">
+  <div class="container">
+      <p>Missionary Enhanced Learning and Training v0.0.1</p>
+  </div>
+</footer>
