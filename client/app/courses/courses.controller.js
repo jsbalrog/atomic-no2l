@@ -25,15 +25,19 @@ angular.module('meltApp').controller('CoursesCtrl', function($scope, $stateParam
 	};
 
 	$scope.cancelCourseEdit = function() {
-		console.log("cancel");
-		$state.go("admin");
+		console.log('cancel');
+		$state.go('admin');
 	};
 
-	$scope.addEnrollment = function(course) {
+	$scope.addEnrollment = function() {
 		var modalInstance = $modal.open({
       templateUrl: 'app/courses/add-enrollment.modal.html',
-      controller: function ($scope, $modalInstance, users) {
+      controller: function ($scope, $modalInstance, users, course) {
 				$scope.users = users;
+				$scope.course = course;
+				$scope.availableSections = _.filter(course.sections, function(section) {
+					return moment(section.begin) > moment();
+				});
 				$scope.selected = {}; // Initially nothing selected by default
 
 				$scope.ok = function () {
@@ -48,7 +52,10 @@ angular.module('meltApp').controller('CoursesCtrl', function($scope, $stateParam
       resolve: {
         users: function () {
           return $scope.users;
-        }
+        },
+				course: function() {
+					return $scope.course;
+				}
       }
     });
 

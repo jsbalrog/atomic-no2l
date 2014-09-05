@@ -1,8 +1,7 @@
 <div class="modal-header">
-		<h4 class="modal-title">Add Enrollment</h4>
+		<h4 class="modal-title">Add Enrollment to {{ course.courseName }}</h4>
 </div>
 <div class="modal-body">
-	Select user
 	<div class="btn-group margin-md-horizontal" dropdown is-open="status.isopen">
 		<button type="button" class="btn btn-primary dropdown-toggle">{{ selected.user ? selected.user.name : 'Select user' }} <span class="caret"></span></button>
 		<ul class="dropdown-menu" role="menu">
@@ -10,8 +9,11 @@
 		</ul>
 	</div>
 
-	<div class="margin-md-vertical" ng-show="selected.user">
+	<div class="margin-md-vertical enrollment-modal-list" ng-show="selected.user">
 		Select course section
+		<ul class="list-group">
+			<li class="list-group-item cursor-pointer" ng-repeat="section in availableSections">{{ section.begin | readableDate:'MMMM Do YYYY' }}</li>
+		</ul>
 	</div>
 </div>
 <div class="modal-footer">
