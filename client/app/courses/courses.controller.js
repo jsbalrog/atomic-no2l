@@ -21,7 +21,7 @@ angular.module('meltApp').controller('CoursesCtrl', function($scope, $stateParam
 			$scope.err = true;
 			$scope.message = course.message;
 		});
-	})
+	});
 
 	$scope.saveOrg = function(org) {
 		$scope.course.orgId = org;

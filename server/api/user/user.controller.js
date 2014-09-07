@@ -4,6 +4,8 @@ var User = require('./user.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
+var common = require('../common');
+var CourseController = require('../course/course.controller');
 
 var validationError = function(res, err) {
   return res.json(422, err);
@@ -98,4 +100,8 @@ exports.me = function(req, res, next) {
  */
 exports.authCallback = function(req, res, next) {
   res.redirect('/');
+};
+
+exports.getUserCourses = function(req, res) {
+    CourseController.coursesReadAllByUserId(req, res);
 };

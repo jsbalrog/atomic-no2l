@@ -1,6 +1,23 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<p>{{ msg }}</p>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <h3 class="page-header">
+        Your Current Courses
+      </h3>
+      <ul class="list-group" ng-repeat="course in myCourses">
+        <li class="list-group-item">
+          <a href="#" tooltip="{{thing.info}}">{{course.name}}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
 
-
-<div ui-view class="span9 slide"></div>
+<footer class="footer">
+  <div class="container">
+    <p>Missionary Enhanced Learning and Training v0.0.1</p>
+  </div>
+</footer>

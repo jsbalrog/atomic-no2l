@@ -4,38 +4,73 @@
 var _ = require('lodash');
 var mongoose = require('mongoose');
 var Course = require('../course/course.model');
+var CourseController = require('../course/course.controller');
 var Section = require('../section/section.model');
 var uzers = require('../user/user.model');
 var Promise = require('promise');
 var common = require('../common');
 
 // Private functions -----------------------------------------------------------------------------------
-function coursesReadOne(courseId) {
+function enrollmentsReadAllByUserId(userId) {
   return new Promise(function(fulfill, reject) {
-    if(!courseId) {
+    if(!userId) {
       reject({
-        "message": "course id required"
+        "message": "userId required"
       });
     } else {
-      Course.findById(courseId).exec(function(err, course) {
-        if(!course) {
-          reject({
-            "message": "course id not found for: " + courseId
-          });
-        } else if(err) {
-          reject({
-            "message": err
-          });
-        } else {
-          fulfill(course);
-        }
+      var user = {};
+      uzers.usersFindById(userId).then(function(u) {
+        var returnValue = {
+          _id: u._id,
+          ldsAccountId: u.ldsAccountId,
+          userName: u.userName,
+          firstName: u.firstName,
+          middleName: u.middleName,
+          lastName: u.lastName,
+          email: u.email,
+          enrollments: []
+        };
+        // Get all sections
+        Section.find().exec(function(err, sections) {
+          if(sections.length < 1) {
+            reject({
+              "message": "No sections found!"
+            });
+          } else if(err) {
+            reject({
+              "message": err
+            });
+          } else {
+            _.forEach(sections, function(section, i) {
+              var matchingEnrollments = _.filter(section.enrollments, function(enrollment) { return enrollment.user.toString() === u._id.toString(); });
+              if(matchingEnrollments && matchingEnrollments.length > 0) {
+                CourseController.coursesReadOne(section.course).then(function(course) {
+                  _.forEach(matchingEnrollments, function(enrollment) {
+                    var e = {};
+                    e._id = enrollment._id;
+                    e.sectionId = section._id;
+                    e.courseId = section.course;
+                    e.courseName = course.name;
+                    e.roleId = enrollment.role;
+                    e.active = enrollment.active;
+                    returnValue.enrollments.push(e);
+                    if(common.done(sections, i)) {
+                      fulfill(returnValue);
+                    }
+                  });
+                }, function(msg) {
+                  reject(msg);
+                });
+              }
+            });
+          }
+        });
+      }, function(msg) {
+        console.log("Rejecting. Reason:", msg.message);
+        reject(msg);
       });
     }
   });
-}
-
-function done(things, i) {
-  return i === things.length-1;
 }
 
 function enrollmentsReadAllByLdsAccountId(ldsAccountId) {
@@ -71,7 +106,7 @@ function enrollmentsReadAllByLdsAccountId(ldsAccountId) {
             _.forEach(sections, function(section, i) {
               var matchingEnrollments = _.filter(section.enrollments, function(enrollment) { return enrollment.user.toString() === u._id.toString(); });
               if(matchingEnrollments && matchingEnrollments.length > 0) {
-                coursesReadOne(section.course).then(function(course) {
+                CourseController.coursesReadOne(section.course).then(function(course) {
                   _.forEach(matchingEnrollments, function(enrollment) {
                     var e = {};
                     e._id = enrollment._id;
@@ -81,7 +116,7 @@ function enrollmentsReadAllByLdsAccountId(ldsAccountId) {
                     e.roleId = enrollment.role;
                     e.active = enrollment.active;
                     returnValue.enrollments.push(e);
-                    if(done(sections, i)) {
+                    if(common.done(sections, i)) {
                       fulfill(returnValue);
                     }
                   });
@@ -200,11 +235,11 @@ module.exports.enroll = function(req, res) {
               enrollmentsCreate(section, usr, user.role).then(function() {
                 msg = { "enrolled": true };
                 jsonSuccessResponse.users.push(addUserProperty(users, usr, msg));
-                if(done(users, i)) {
+                if(common.done(users, i)) {
                   common.sendJSONResponse(res, 200, jsonSuccessResponse);
                 }
               }, function(jsonErrorResponse) {
-                if(done(users, i)) {
+                if(common.done(users, i)) {
                   common.sendJSONResponse(res, 400, jsonErrorResponse);
                 }
               });
@@ -216,25 +251,25 @@ module.exports.enroll = function(req, res) {
               if(foundEnrollments) {
                 msg = { "enrolled": false, "message": "user already enrolled in section" };
                 jsonSuccessResponse.users.push(addUserProperty(users, usr, msg));
-                if(done(users, i)) {
+                if(common.done(users, i)) {
                   common.sendJSONResponse(res, 200, jsonSuccessResponse);
                 }
               } else {
                 enrollmentsCreate(section, usr, user.role).then(function() {
                   msg = { "enrolled": true };
                   jsonSuccessResponse.users.push(addUserProperty(users, usr, msg));
-                  if(done(users, i)) {
+                  if(common.done(users, i)) {
                     common.sendJSONResponse(res, 200, jsonSuccessResponse);
                   }
                 }, function(jsonErrorResponse) {
-                  if(done(users, i)) {
+                  if(common.done(users, i)) {
                     common.sendJSONResponse(res, 400, jsonErrorResponse);
                   }
                 });
               }
             }
           }, function(jsonErrorResponse) {
-            if(done(users, i)) {
+            if(common.done(users, i)) {
               common.sendJSONResponse(res, 200, jsonErrorResponse);
             }
           });
@@ -246,22 +281,22 @@ module.exports.enroll = function(req, res) {
               msg = { "enrolled": true };
               jsonSuccessResponse.sectionId = section. _id;
               jsonSuccessResponse.users.push(addUserProperty(users, usr, msg));
-              if(done(users, i)) {
+              if(common.done(users, i)) {
                 common.sendJSONResponse(res, 200, jsonSuccessResponse);
               }
             }, function(jsonErrorResponse) {
-              if(done(users, i)) {
+              if(common.done(users, i)) {
                 common.sendJSONResponse(res, 400, jsonErrorResponse);
               }
             });
           }, function(jsonErrorResponse) {
-            if(done(users, i)) {
+            if(common.done(users, i)) {
               common.sendJSONResponse(res, 200, jsonErrorResponse);
             }
           });
         }
       }, function(jsonErrorResponse) {
-        if(done(users, i)) {
+        if(common.done(users, i)) {
           common.sendJSONResponse(res, 400, jsonErrorResponse);
         }
       });
@@ -271,5 +306,3 @@ module.exports.enroll = function(req, res) {
     common.sendJSONResponse(res, 400, msg);
   }
 };
-
-

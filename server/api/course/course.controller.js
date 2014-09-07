@@ -2,6 +2,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var mongoose = require('mongoose');
 var Course = require('./course.model');
 var Section = require('../section/section.model');
@@ -46,6 +47,69 @@ function getAllSectionsByCourseId(courseId) {
 }
 
 // Public functions ------------------------------------------------------------
+module.exports.coursesReadOne = function(courseId) {
+  return new Promise(function(fulfill, reject) {
+    if(!courseId) {
+      reject({
+        "message": "course id required"
+      });
+    } else {
+      Course.findById(courseId).exec(function(err, course) {
+        if(!course) {
+          reject({
+            "message": "course id not found for: " + courseId
+          });
+        } else if(err) {
+          reject({
+            "message": err
+          });
+        } else {
+          fulfill(course);
+        }
+      });
+    }
+  });
+};
+
+module.exports.coursesReadAllByUserId = function(req, res) {
+  var returnValue = [];
+
+  if(!req.params.id) {
+    common.sendJSONResponse(res, 400, {
+      "message": "userId required"
+    });
+  } else {
+    // Get all sections
+    Section.find().populate('course').exec(function(err, sections) {
+      if(sections.length < 1) {
+        common.sendJSONResponse(res, 400, {
+          "message": "No sections found!"
+        });
+      } else if(err) {
+        common.sendJSONResponse(res, 400, {
+          "message": err
+        });
+      } else {
+        _.forEach(sections, function(section, i) {
+          var matchingEnrollments = _.filter(section.enrollments, function(enrollment) {
+            return enrollment.user.toString() == req.params.id;
+          });
+          if(matchingEnrollments && matchingEnrollments.length > 0) {
+            returnValue.push(section.course);
+          }
+        });
+        if(returnValue && returnValue.length > 0) {
+          common.sendJSONResponse(res, 200, returnValue);
+        } else {
+          common.sendJSONResponse(res, 400, {
+            "message": "no enrollments for user"
+          });
+        }
+      }
+    });
+  }
+}
+
 // Get an org's courses
 module.exports.getCoursesByOrgId = function(req, res) {
   var msg = {};

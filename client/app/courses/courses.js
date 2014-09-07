@@ -6,7 +6,7 @@ angular.module('meltApp')
       .state('courses', {
         url: '/courses',
         templateUrl: 'app/courses/courses.html',
-        controller: 'CoursesCtrl',
+        controller: 'MyCoursesCtrl',
         authenticate: true
       });
   });

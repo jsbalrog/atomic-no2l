@@ -19,7 +19,7 @@ angular.module('meltApp')
         }
       }
 	  });
-  }).factory('UserService', function($http, $q, $resource) {
+  }).factory('UserService', function($http, $q) {
 		var cachedUsers = [];
 
 		function getAllUsers() {
@@ -42,9 +42,9 @@ angular.module('meltApp')
 			});
 			var uinc = _.uniq(usersInCourse, true);
 
-			var bIds = _.pluck(uinc, "_id");
+			var bIds = _.pluck(uinc, '_id');
 
-			retVal = _.filter(cachedUsers, function(el) { return !_.contains(bIds, el._id); })
+			retVal = _.filter(cachedUsers, function(el) { return !_.contains(bIds, el._id); });
 
 			return retVal;
 		}
