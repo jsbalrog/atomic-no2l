@@ -6,9 +6,12 @@
       <h3 class="page-header">
         Your Current Courses
       </h3>
+			<span ng-if="err">
+				<div class="alert alert-info">{{ message }}</div>
+			</span>
       <ul class="list-group" ng-repeat="course in myCourses">
         <li class="list-group-item">
-          <a href="#" tooltip="{{thing.info}}">{{course.name}}
+          <a href="" ui-sref="my-course-detail({ courseId: course._id })" tooltip="{{course.name}}">{{course.name}}
           </a>
         </li>
       </ul>

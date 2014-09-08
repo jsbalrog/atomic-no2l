@@ -1,0 +1,62 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+<p class="small margin-md-bottom">
+	<a href="" ng-click="cancelCourseEdit()">
+		<span class="glyphicon glyphicon-arrow-left"></span> Go back
+	</a>
+</p>
+<span class="h3">{{ course.courseName }}</span>
+
+<div ng-repeat="post in course.posts | orderBy:'createdOn'">
+	<div>
+		<span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(post)"></span>
+		{{ post.upvotes }}
+		<span style="font-size:20px; margin-left:10px;">
+			{{ post.title }}
+		</span>
+	</div>
+	<div>
+		<span style="font-size:16px; margin-left:10px;">
+			{{ post.content }}
+		</span>
+		<a href="" ng-click="toggleComments(post)">Toggle comments</a>
+	</div>
+	<div ng-show="post.comments && post.showComments" ng-repeat="comment in post.comments | orderBy: 'createdOn'">
+		{{ comment.body }} - {{ comment.user }} {{ comment.upvotes }} <span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(comment)"></span>
+		<form ng-show="$index == post.comments.length-1" ng-submit="addComment(post, comment, newComment)">
+			Add comment
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Content" ng-model="newComment.body">
+			</div>
+			<button type="submit" class="btn btn-secondary">Comment</button>
+		</form>
+	</div>
+	<div ng-show="!post.comments && post.showComments">
+		<form ng-submit="addComment(post, null, newComment)">
+			Add comment
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Content" ng-model="newComment.body">
+			</div>
+			<button type="submit" class="btn btn-secondary">Comment</button>
+		</form>
+	</div>
+</div>
+
+<form ng-submit="addPost()" style="margin-top:30px;">
+	<h4>Add a new post</h4>
+	<div class="form-group">
+		<input type="text" class="form-control" placeholder="Title" ng-model="title">
+	</div>
+	<div class="form-group">
+		<input type="text" class="form-control" placeholder="Content" ng-model="content">
+	</div>
+	<button type="submit" class="btn btn-primary">Post</button>
+</form>
+</div>
+
+<footer class="footer">
+  <div class="container">
+      <p>Missionary Enhanced Learning and Training v0.0.1</p>
+  </div>
+</footer>

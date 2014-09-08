@@ -8,7 +8,6 @@ angular.module('meltApp').controller('CoursesCtrl', function($scope, $stateParam
 		'CES'
 	];
 
-
 	UserService.getAllUsers().then(function(users) {
 		$scope.users = users;
 		CourseService.getCourseDetails($stateParams.courseId).then(function(course) {

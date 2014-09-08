@@ -5,7 +5,7 @@ angular.module('meltApp')
     $scope.menu = [
       {
         'title': 'Courses',
-        'link': '/courses'
+        'link': '/my-courses'
       },
       {
         'title': 'Enrollments',
