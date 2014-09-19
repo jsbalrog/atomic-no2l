@@ -12,6 +12,10 @@
 var _ = require('lodash');
 var Thing = require('./thing.model');
 
+function handleError(res, err) {
+  return res.send(500, err);
+}
+
 // Get list of things
 exports.index = function(req, res) {
   Thing.find(function (err, things) {
@@ -62,7 +66,3 @@ exports.destroy = function(req, res) {
     });
   });
 };
-
-function handleError(res, err) {
-  return res.send(500, err);
-}

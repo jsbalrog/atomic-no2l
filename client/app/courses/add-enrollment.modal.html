@@ -12,7 +12,7 @@
 	<div class="margin-md-vertical enrollment-modal-list" ng-show="selected.user">
 		Select course section
 		<ul class="list-group">
-			<li class="list-group-item cursor-pointer" ng-repeat="section in availableSections">{{ section.begin | readableDate:'MMMM Do YYYY' }}</li>
+			<li class="list-group-item cursor-pointer" ng-repeat="section in availableSections" ng-click="createEnrollment(section)">{{ section.begin | readableDate:'MMMM Do YYYY' }}</li>
 		</ul>
 	</div>
 </div>

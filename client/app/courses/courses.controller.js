@@ -49,6 +49,10 @@ angular.module('meltApp').controller('CoursesCtrl', function($scope, $stateParam
 				$scope.cancel = function () {
 					$modalInstance.dismiss('cancel');
 				};
+				
+				$scope.createEnrollment = function(section) {
+					console.log(section);
+				};
 			},
       size: 'lg',
       resolve: {
